@@ -37,3 +37,11 @@
 #### Navbar should update as user logs in
 
 #### Refactor the code except app.jsx move other component to components folder
+
+#### You should not be access other routes without login
+
+#### If token is not present then redirect to login page
+
+#### Logout
+
+#### Profile page

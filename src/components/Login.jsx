@@ -8,6 +8,8 @@ import { API_BASE_URL } from "../utils/constant";
 const Login = () => {
   const [email, setEmail] = useState("ranjan@gmail.com");
   const [password, setPassword] = useState("Ranjan@123");
+  const [error, setError] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,6 +19,10 @@ const Login = () => {
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+  };
+
+  const handleErrorChange = (value) => {
+    setError(value);
   };
 
   const handleLoginListener = async (event) => {
@@ -31,6 +37,7 @@ const Login = () => {
       return navigate("/");
     } catch (error) {
       console.log("error", error);
+      handleErrorChange(error?.response?.data?.message || 'Something went wrong');
     }
   };
 
@@ -66,6 +73,7 @@ const Login = () => {
                 onChange={handlePasswordChange}
               />
             </div>
+            {error && <div className="text-red-400 mt-2">{error}</div>}
             <div className="form-control mt-6">
               <button className="btn btn-primary" type="submit">
                 Login
