@@ -4,14 +4,15 @@ import { API_BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
+import UserCard from "./userCard";
 
 const EditProfile = ({ userData }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(userData);
   // initialize the user state
   const [user, setUser] = useState(userData);
   const [skillInput, setSkillInput] = useState("");
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   /**
    * @method handleChange
@@ -62,7 +63,7 @@ const EditProfile = ({ userData }) => {
           withCredentials: true,
         }
       );
-      dispatch(addUser(response.data.data));
+      dispatch(addUser({ ...response.data.data, email: user.email }));
       navigate("/");
     } catch (err) {
       console.log("Error:", err);
@@ -98,7 +99,7 @@ const EditProfile = ({ userData }) => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center py-10 px-6">
+    <div className="min-h-screen bg-base-200 py-10 px-6 flex flex-col items-center">
       <div className="card w-full max-w-lg bg-base-100 shadow-2xl p-8">
         <h2 className="text-3xl font-bold text-center text-primary mb-8">
           Edit Profile
@@ -250,13 +251,37 @@ const EditProfile = ({ userData }) => {
           </div>
 
           {/* Save Button */}
-          <div className="text-center pt-4">
-            <button type="submit" className="btn btn-primary w-full">
+          <div className="flex gap-4 justify-center text-center pt-4">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setIsPreviewOpen(true)}
+            >
+              Preview
+            </button>
+            <button type="submit" className="btn btn-primary">
               Save Changes
             </button>
           </div>
         </form>
       </div>
+      {/* Modal for Profile Preview */}
+      {isPreviewOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-base-100 p-6 rounded-2xl shadow-lg w-96 relative">
+            <button
+              onClick={() => setIsPreviewOpen(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 font-bold text-xl cursor-pointer"
+            >
+              ✕
+            </button>
+            <h3 className="text-2xl font-bold text-primary mb-4 text-center">
+              Profile Preview
+            </h3>
+            <UserCard user={user} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
