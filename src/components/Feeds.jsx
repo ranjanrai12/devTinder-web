@@ -1,9 +1,37 @@
-import React from 'react'
+import axios from "axios";
+import { API_BASE_URL } from "../utils/constant";
+import { useSelector, useDispatch } from "react-redux";
+import { addFeed } from "../utils/feedSlice";
+import { useEffect } from "react";
+import UserCard from "./userCard";
 
 const Feeds = () => {
-  return (
-    <div>Feeds</div>
-  )
-}
+  const userFeeds = useSelector((state) => state.feed);
+  const dispatch = useDispatch();
 
-export default Feeds
+  const getFeeds = async () => {
+    if (userFeeds) return;
+    try {
+      const userFeedResponse = await axios.get(API_BASE_URL + "/user/feed", {
+        withCredentials: true,
+      });
+      dispatch(addFeed(userFeedResponse?.data?.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getFeeds();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-base-200 py-10 px-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {userFeeds &&
+          userFeeds.map((user) => <UserCard key={user._id} user={user} />)}
+      </div>
+    </div>
+  );
+};
+
+export default Feeds;

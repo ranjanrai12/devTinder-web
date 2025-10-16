@@ -44,4 +44,8 @@
 
 #### Logout
 
+#### Get the feed and add the feed in store
+
+#### Build the user card on the feed
+
 #### Profile page

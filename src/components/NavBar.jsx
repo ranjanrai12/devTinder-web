@@ -41,10 +41,7 @@ const NavBar = () => {
             className="btn btn-ghost btn-circle avatar mx-5"
           >
             <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
+              <img alt="user image" src={user.photoUrl} />
             </div>
           </div>
 
