@@ -77,10 +77,10 @@ const EditProfile = ({ userData }) => {
   const handleSkillKeyDown = (e) => {
     if (e.key === "Enter" && skillInput.trim()) {
       e.preventDefault();
-      if (!user.skills.includes(skillInput.trim())) {
+      if (!user?.skills?.includes(skillInput.trim())) {
         setUser((prev) => ({
           ...prev,
-          skills: [...prev.skills, skillInput.trim()],
+          skills: [...(prev?.skills || []), skillInput.trim()],
         }));
       }
       setSkillInput("");
@@ -122,6 +122,7 @@ const EditProfile = ({ userData }) => {
               />
             </label>
           </div>
+
           {/* Name Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -137,6 +138,7 @@ const EditProfile = ({ userData }) => {
                 required
               />
             </div>
+
             {/* Last Name */}
             <div>
               <label className="label">
@@ -193,9 +195,9 @@ const EditProfile = ({ userData }) => {
                 onChange={handleChange}
                 className="select select-bordered w-full"
               >
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
+                <option>male</option>
+                <option>female</option>
+                <option>other</option>
               </select>
             </div>
           </div>
@@ -224,21 +226,22 @@ const EditProfile = ({ userData }) => {
               <span className="label-text font-medium">Skills</span>
             </label>
             <div className="flex flex-wrap gap-2 mb-2">
-              {user.skills.map((skill, index) => (
-                <div
-                  key={index}
-                  className="badge badge-primary badge-lg gap-2 py-3 px-4"
-                >
-                  {skill}
-                  <button
-                    type="button"
-                    onClick={() => removeSkill(skill)}
-                    className="ml-1 text-xs text-white hover:text-gray-200"
+              {user.skills &&
+                user.skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="badge badge-primary badge-lg gap-2 py-3 px-4"
                   >
-                    ✕
-                  </button>
-                </div>
-              ))}
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => removeSkill(skill)}
+                      className="ml-1 text-xs text-white hover:text-gray-200"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
             </div>
             <input
               type="text"
@@ -265,6 +268,7 @@ const EditProfile = ({ userData }) => {
           </div>
         </form>
       </div>
+
       {/* Modal for Profile Preview */}
       {isPreviewOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -278,7 +282,7 @@ const EditProfile = ({ userData }) => {
             <h3 className="text-2xl font-bold text-primary mb-4 text-center">
               Profile Preview
             </h3>
-            <UserCard user={user} />
+            <UserCard user={user} shouldShowAction={false} />
           </div>
         </div>
       )}

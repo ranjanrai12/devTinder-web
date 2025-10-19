@@ -48,4 +48,10 @@
 
 #### Build the user card on the feed
 
-#### Profile page
+#### Edit Profile feature
+
+#### Show toast message on save of profile
+
+#### See all my connections
+
+#### Create request received page

@@ -1,5 +1,5 @@
-const UserCard = ({ user }) => {
-  const { firstName, lastName, age, gender, bio, photoUrl } = user;
+const UserCard = ({ user, shouldShowAction = true }) => {
+  const { firstName, lastName, age, gender, about, photoUrl } = user;
 
   return (
     <div className="card bg-base-100 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-200">
@@ -33,16 +33,20 @@ const UserCard = ({ user }) => {
           )}
         </div>
 
-        {bio && (
+        {about && (
           <p className="text-gray-500 text-sm mt-2 px-4">
-            {bio.length > 80 ? bio.slice(0, 80) + "..." : bio}
+            {about.length > 80 ? about.slice(0, 80) + "..." : about}
           </p>
         )}
 
-        <div className="card-actions mt-4">
-          <button className="btn btn-primary btn-sm w-28">Send Request</button>
-          <button className="btn btn-outline btn-sm w-24">Ignore</button>
-        </div>
+        {shouldShowAction && (
+          <div className="card-actions mt-4">
+            <button className="btn btn-primary btn-sm w-28">
+              Send Request
+            </button>
+            <button className="btn btn-outline btn-sm w-24">Ignore</button>
+          </div>
+        )}
       </div>
     </div>
   );
