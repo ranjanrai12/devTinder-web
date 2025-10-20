@@ -26,11 +26,19 @@ const Feeds = () => {
     getFeeds();
   }, []);
 
+  if (!userFeeds || userFeeds.length === 0)
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
+        No Feeds Found
+      </div>
+    );
+
   return (
     <div className="min-h-screen bg-base-200 py-10 px-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {userFeeds &&
-          userFeeds.map((user) => <UserCard key={user._id} user={user} />)}
+        {userFeeds.map((user) => (
+          <UserCard key={user._id} user={user} />
+        ))}
       </div>
     </div>
   );

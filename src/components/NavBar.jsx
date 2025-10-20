@@ -4,7 +4,7 @@ import { removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constant";
-import { removeFeed } from "../utils/feedSlice";
+import { removeAllFeed } from "../utils/feedSlice";
 
 const NavBar = () => {
   const user = useSelector((state) => state.user);
@@ -19,7 +19,7 @@ const NavBar = () => {
         { withCredentials: true }
       );
       dispatch(removeUser());
-      dispatch(removeFeed());
+      dispatch(removeAllFeed());
       navigate("/login");
     } catch (error) {
       console.log(error);

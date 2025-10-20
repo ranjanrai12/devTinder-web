@@ -1,5 +1,26 @@
+import axios from "axios";
+import { API_BASE_URL } from "../utils/constant";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
+
 const UserCard = ({ user, shouldShowAction = true }) => {
-  const { firstName, lastName, age, gender, about, photoUrl } = user;
+  const { _id, firstName, lastName, age, gender, about, photoUrl } = user;
+  const dispatch = useDispatch();
+
+  const sendAndIgnoreRequestHandler = async (status, userId) => {
+    try {
+      await axios.post(
+        API_BASE_URL + "/request/send/" + status + "/" + userId,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(removeUserFromFeed(userId));
+    } catch (err) {
+      console.log("Error:", err);
+    }
+  };
 
   return (
     <div className="card bg-base-100 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-200">
@@ -41,10 +62,18 @@ const UserCard = ({ user, shouldShowAction = true }) => {
 
         {shouldShowAction && (
           <div className="card-actions mt-4">
-            <button className="btn btn-primary btn-sm w-28">
+            <button
+              className="btn btn-primary btn-sm w-28"
+              onClick={() => sendAndIgnoreRequestHandler("interested", _id)}
+            >
               Send Request
             </button>
-            <button className="btn btn-outline btn-sm w-24">Ignore</button>
+            <button
+              className="btn btn-outline btn-sm w-24"
+              onClick={() => sendAndIgnoreRequestHandler("ignored", _id)}
+            >
+              Ignore
+            </button>
           </div>
         )}
       </div>
