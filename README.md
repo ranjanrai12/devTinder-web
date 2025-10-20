@@ -55,3 +55,9 @@
 #### See all my connections
 
 #### Create request received page
+
+#### Feature - Accept/Request Connection request
+
+#### Send/ignore the user card from feed 
+
+#### sign-up new User
