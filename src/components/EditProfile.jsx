@@ -73,7 +73,7 @@ const EditProfile = ({ userData }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
       dispatch(addUser({ ...response.data.data, email: user.email }));
       navigate("/");
@@ -121,7 +121,14 @@ const EditProfile = ({ userData }) => {
           <div className="flex flex-col items-center space-y-3">
             <div className="avatar">
               <div className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={`${API_BASE_URL}${user.photoUrl}`} alt="Profile" />
+                <img
+                  src={
+                    user.photoFile
+                      ? user.photoUrl
+                      : `${API_BASE_URL}${user.photoUrl}`
+                  }
+                  alt="Profile"
+                />
               </div>
             </div>
             <label className="btn btn-sm btn-outline">

@@ -60,8 +60,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
-      <div className="card w-full max-w-md bg-base-100 shadow-2xl">
+    <div className="md:min-h-screen flex items-center justify-center bg-base-200">
+      <div className="card w-full max-w-md bg-base-100 md:shadow-2xl">
         <div className="card-body">
           <h2 className="text-3xl font-bold text-center text-primary mb-2">
             {isLogin ? "Welcome Back 👋" : "Create an Account ✨"}
