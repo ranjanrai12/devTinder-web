@@ -35,7 +35,11 @@ const EditProfile = ({ userData }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setUser((prev) => ({ ...prev, photoUrl: URL.createObjectURL(file) }));
+      setUser((prev) => ({
+        ...prev,
+        photoFile: file, // actual file to upload
+        photoUrl: URL.createObjectURL(file), // for preview
+      }));
     }
   };
   /**
@@ -47,21 +51,29 @@ const EditProfile = ({ userData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        age: user.age,
-        gender: user.gender,
-        photoUrl: user.photoUrl,
-        about: user.about,
-        skills: user.skills,
-      };
+      const formData = new FormData();
+
+      // Append normal fields
+      formData.append("firstName", user.firstName);
+      formData.append("lastName", user.lastName);
+      formData.append("age", user.age);
+      formData.append("gender", user.gender);
+      formData.append("about", user.about);
+      user.skills.forEach((skill) => formData.append("skills[]", skill));
+
+      // Append image only if updated
+      if (user.photoFile) {
+        formData.append("photoUrl", user.photoFile);
+      }
       const response = await axios.patch(
         API_BASE_URL + "/profile/edit",
-        payload,
+        formData,
         {
           withCredentials: true,
-        }
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
       dispatch(addUser({ ...response.data.data, email: user.email }));
       navigate("/");
@@ -99,7 +111,7 @@ const EditProfile = ({ userData }) => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 py-10 px-6 flex flex-col items-center">
+    <div className="min-h-screen bg-base-200 flex flex-col items-center">
       <div className="card w-full max-w-lg bg-base-100 shadow-2xl p-8">
         <h2 className="text-3xl font-bold text-center text-primary mb-8">
           Edit Profile
@@ -109,7 +121,7 @@ const EditProfile = ({ userData }) => {
           <div className="flex flex-col items-center space-y-3">
             <div className="avatar">
               <div className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user.photoUrl} alt="Profile" />
+                <img src={`${API_BASE_URL}${user.photoUrl}`} alt="Profile" />
               </div>
             </div>
             <label className="btn btn-sm btn-outline">

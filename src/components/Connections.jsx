@@ -31,8 +31,8 @@ const Connections = () => {
     );
 
   return (
-    <div className="min-h-screen bg-base-200 py-10 px-6">
-      <div className="max-w-4xl mx-auto bg-base-100 shadow-md rounded-2xl p-6">
+    <div className="min-h-screen bg-base-200">
+      <div className="max-w-4xl mx-auto bg-base-100 rounded-2xl p-6">
         <h2 className="text-2xl font-bold mb-6 text-primary">
           Your Connections
         </h2>
