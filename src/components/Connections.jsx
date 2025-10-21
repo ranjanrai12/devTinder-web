@@ -60,7 +60,7 @@ const Connections = () => {
                     {user.about || "No bio yet."}
                   </p>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {user.skills?.slice(0, 3).map((skill, i) => (
+                    {user.skills?.map((skill, i) => (
                       <span
                         key={i}
                         className="badge badge-sm badge-outline badge-primary"
@@ -68,20 +68,15 @@ const Connections = () => {
                         {skill}
                       </span>
                     ))}
-                    {user.skills?.length > 3 && (
-                      <span className="badge badge-sm badge-ghost">
-                        +{user.skills.length - 3}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
-              <div className="flex space-x-2">
+              {/* <div className="flex space-x-2">
                 <button className="btn btn-sm btn-outline btn-primary">
                   Message
                 </button>
                 <button className="btn btn-sm btn-outline">View</button>
-              </div>
+              </div> */}
             </li>
           ))}
         </ul>
