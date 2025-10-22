@@ -4,7 +4,7 @@ import { API_BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
-import UserCard from "./userCard";
+import UserCard from "./UserCard";
 
 const EditProfile = ({ userData }) => {
   const dispatch = useDispatch();
