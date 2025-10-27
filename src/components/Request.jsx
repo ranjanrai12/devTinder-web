@@ -46,8 +46,8 @@ const Requests = () => {
     );
 
   return (
-    <div className="min-h-screen bg-base-200 py-8 px-4 sm:px-8">
-      <div className="max-w-4xl mx-auto bg-base-100 shadow-md rounded-2xl p-4 sm:p-6">
+    <div className="min-h-screen bg-base-200">
+      <div className="max-w-4xl mx-auto bg-base-100 md:shadow-md rounded-2xl p-4 sm:p-6">
         <h2 className="text-xl sm:text-2xl font-bold mb-6 text-primary text-center sm:text-left">
           Requests Received
         </h2>
