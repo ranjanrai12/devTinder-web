@@ -31,8 +31,40 @@ const NavBar = () => {
   return (
     <div className="navbar bg-base-300 shadow-sm">
       <div className="flex-1">
-        <Link to={"/"} className="btn btn-ghost text-xl">
-          DevTinder
+        <Link to={"/"} className="flex items-center gap-3">
+          <div className="avatar">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                className="fill-current text-primary-content"
+              >
+                {/* Binary 0 (left top) */}
+                <circle cx="7" cy="7" r="2" />
+                {/* Binary 1 (right top) */}
+                <rect x="15" y="5" width="1.5" height="4" rx="0.75" />
+                {/* Binary 0 (right bottom) */}
+                <circle cx="17" cy="17" r="2" />
+                {/* Binary 1 (left bottom) */}
+                <rect x="7" y="15" width="1.5" height="4" rx="0.75" />
+                {/* Connection lines - perfectly centered */}
+                <path
+                  d="M9.5 7L14.5 7M9.5 17L14.5 17"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+                {/* Central connection dot */}
+                <circle cx="12" cy="12" r="1" className="fill-current" />
+              </svg>
+            </div>
+          </div>
+          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            DevMatches
+          </span>
         </Link>
       </div>
       {user && (

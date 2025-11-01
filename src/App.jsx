@@ -7,6 +7,11 @@ import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import Connections from "./components/Connections";
 import Requests from "./components/Request";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsOfService from "./components/TermsOfService";
+import RefundPolicy from "./components/RefundPolicy";
+import ContactUs from "./components/ContactUs";
+import ShippingPolicy from "./components/AboutUs";
 
 function App() {
   return (
@@ -21,6 +26,11 @@ function App() {
               <Route path="/connections" element={<Connections />}></Route>
               <Route path="/requests" element={<Requests />}></Route>
             </Route>
+            <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
+            <Route path="/terms-of-service" element={<TermsOfService />}></Route>
+            <Route path="/refund-policy" element={<RefundPolicy />}></Route>
+            <Route path="/contact-us" element={<ContactUs />}></Route>
+            <Route path="/about-us" element={<ShippingPolicy />}></Route>
             <Route path="*" element={<h1>Not found</h1>}></Route>
           </Routes>
         </BrowserRouter>
