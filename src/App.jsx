@@ -12,6 +12,7 @@ import TermsOfService from "./components/TermsOfService";
 import RefundPolicy from "./components/RefundPolicy";
 import ContactUs from "./components/ContactUs";
 import ShippingPolicy from "./components/AboutUs";
+import Chat from "./components/Chat";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/profile" element={<Profile />}></Route>
               <Route path="/connections" element={<Connections />}></Route>
               <Route path="/requests" element={<Requests />}></Route>
+              <Route path="/chat/:userId" element={ <Chat />}></Route>
             </Route>
             <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
             <Route path="/terms-of-service" element={<TermsOfService />}></Route>

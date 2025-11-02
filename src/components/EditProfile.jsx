@@ -112,7 +112,7 @@ const EditProfile = ({ userData }) => {
 
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center">
-      <div className="card w-full max-w-lg bg-base-100 shadow-2xl p-8">
+      <div className="card w-full max-w-lg bg-base-100 p-8">
         <h2 className="text-3xl font-bold text-center text-primary mb-8">
           Edit Profile
         </h2>
