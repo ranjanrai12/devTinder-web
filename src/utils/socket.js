@@ -8,6 +8,7 @@ export const createSocketConnection = () => {
   //     path: "/api/socket.io",
   //   });
   return io(import.meta.env.VITE_SOCKET_URL, {
+    path: import.meta.env.VITE_SOCKET_PATH,
     withCredentials: true,
   });
 };
