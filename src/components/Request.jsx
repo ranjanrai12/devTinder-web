@@ -64,10 +64,7 @@ const Requests = () => {
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   <div className="avatar">
                     <div className="w-16 sm:w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-1">
-                      <img
-                        src={ `${API_BASE_URL}${user.photoUrl}` }
-                        alt={user.firstName}
-                      />
+                      <img src={`${user.photoUrl}`} alt={user.firstName} />
                     </div>
                   </div>
                   <div>
@@ -79,22 +76,22 @@ const Requests = () => {
                     </p>
                   </div>
                 </div>
-                  <div className="flex-1">
-                    <div className="flex flex-wrap sm:justify-start gap-1 mt-2">
-                      {user.skills?.map((skill, i) => (
-                        <span
-                          key={i}
-                          className="badge badge-sm badge-outline badge-primary px-2 py-1 text-xs"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+                <div className="flex-1">
+                  <div className="flex flex-wrap sm:justify-start gap-1 mt-2">
+                    {user.skills?.map((skill, i) => (
+                      <span
+                        key={i}
+                        className="badge badge-sm badge-outline badge-primary px-2 py-1 text-xs"
+                      >
+                        {skill}
+                      </span>
+                    ))}
                   </div>
+                </div>
 
                 {/* Right Section (Buttons) */}
                 <div className="flex justify-center sm:justify-end gap-2 mt-2 sm:mt-0 ml-auto">
-                   <button
+                  <button
                     className="btn btn-sm btn-error btn-outline w-24 sm:w-auto"
                     onClick={() => reviewRequest("rejected", req._id)}
                   >

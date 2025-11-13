@@ -47,10 +47,7 @@ const Connections = () => {
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="avatar">
                   <div className="w-16 sm:w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-1">
-                    <img
-                      src={user.photoUrl || "/assets/default-avatar.png"}
-                      alt={user.firstName}
-                    />
+                    <img src={user.photoUrl} alt={user.firstName} />
                   </div>
                 </div>
                 <div>
