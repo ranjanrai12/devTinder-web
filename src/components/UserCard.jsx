@@ -26,7 +26,7 @@ const UserCard = ({ user, shouldShowAction = true }) => {
       {/* Image Section */}
       <div className="relative w-full h-56 sm:h-64">
         <img
-          src={`${API_BASE_URL}${photoUrl}`}
+          src={`${photoUrl}`}
           alt={`${firstName} ${lastName}`}
           className="object-cover w-full h-full"
         />
