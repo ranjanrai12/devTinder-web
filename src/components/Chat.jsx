@@ -39,6 +39,7 @@ const Chat = () => {
           firstName: senderId.firstName,
           senderId: senderId._id,
           createdAt,
+          photoUrl: senderId.photoUrl,
         };
       });
       setAllIncomingMessages(messages);
@@ -153,7 +154,7 @@ const Chat = () => {
           </svg>
         </button>
         <img
-          src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
+          src={allIncomingMessages[0]?.photoUrl}
           alt="User avatar"
           className="w-12 h-12 rounded-full object-cover"
         />
@@ -191,8 +192,8 @@ const Chat = () => {
                     <img
                       src={
                         isOwnMessage
-                          ? "https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
-                          : "https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
+                          ? user.photoUrl
+                          : msg.photoUrl
                       }
                       alt="avatar"
                     />
