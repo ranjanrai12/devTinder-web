@@ -138,7 +138,7 @@ const Chat = () => {
   }, [allIncomingMessages]);
 
   return (
-    <div className="flex flex-col bg-base-200 rounded-lg shadow-inner max-w-3xl mx-auto">
+    <div className="flex flex-col h-screen bg-base-200 rounded-lg shadow-inner max-w-3xl mx-auto">
       {/* Header */}
       <div className="bg-base-100 p-4 flex items-center gap-4 shadow-md sticky top-0 z-10">
         <button className="" onClick={() => navigate(-1)}>
@@ -171,43 +171,52 @@ const Chat = () => {
 
       {/* Chat messages */}
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-base-200">
-        {allIncomingMessages.map((msg, index) => {
-          const isOwnMessage = msg.senderId === fromUserId;
-          return (
-            <div
-              key={index}
-              className={`chat ${
-                isOwnMessage ? "chat-end" : "chat-start"
-              } animate-fade-in`}
-            >
-              <div className="chat-image avatar">
-                <div className="w-10 rounded-full">
-                  <img
-                    src={
-                      isOwnMessage
-                        ? "https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
-                        : "https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
-                    }
-                    alt="avatar"
-                  />
+        {allIncomingMessages.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-gray-500">
+            <h3 className="text-lg font-semibold">You're starting a new conversation</h3>
+            <p className="text-sm mt-2">Type your first message below.</p>
+          </div>
+        ) : (
+          allIncomingMessages.map((msg, index) => {
+            const isOwnMessage = msg.senderId === fromUserId;
+            return (
+              <div
+                key={index}
+                className={`chat ${
+                  isOwnMessage ? "chat-end" : "chat-start"
+                } animate-fade-in`}
+              >
+                <div className="chat-image avatar">
+                  <div className="w-10 rounded-full">
+                    <img
+                      src={
+                        isOwnMessage
+                          ? "https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
+                          : "https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
+                      }
+                      alt="avatar"
+                    />
+                  </div>
+                </div>
+                <div className="chat-header">
+                  {isOwnMessage ? "" : msg.firstName}
+                  <time className="text-xs opacity-50 ml-2">
+                    {formatLastSeen(msg?.createdAt)}
+                  </time>
+                </div>
+                <div
+                  className={`chat-bubble ${
+                    isOwnMessage
+                      ? "chat-bubble-secondary"
+                      : "chat-bubble-primary"
+                  }`}
+                >
+                  {msg.message}
                 </div>
               </div>
-              <div className="chat-header">
-                {isOwnMessage ? "" : msg.firstName}
-                <time className="text-xs opacity-50 ml-2">
-                  {formatLastSeen(msg?.createdAt)}
-                </time>
-              </div>
-              <div
-                className={`chat-bubble ${
-                  isOwnMessage ? "chat-bubble-secondary" : "chat-bubble-primary"
-                }`}
-              >
-                {msg.message}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
         <div ref={chatEndRef} />
       </div>
 
