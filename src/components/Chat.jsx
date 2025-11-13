@@ -7,48 +7,62 @@ import { API_BASE_URL } from "../utils/constant";
 
 const Chat = () => {
   const [message, setMessage] = useState("");
-  const { toUserId } = useParams();
   const [allIncomingMessages, setAllIncomingMessages] = useState([]);
   const [isUserOnline, setIsUserOnline] = useState(false);
   const [lastSeen, setLastSeen] = useState(null);
 
+  const { toUserId } = useParams();
   const user = useSelector((state) => state.user);
   const fromUserId = user?._id;
 
-  // Keep socket instance in a ref
   const socketRef = useRef(null);
+  const chatEndRef = useRef(null);
 
+  // Scroll to bottom
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Fetch messages
   const fetchChatMessages = async () => {
-    const chat = await axios.get(`${API_BASE_URL}/user/chat/${toUserId}`, {
-      withCredentials: true,
-    });
-
-    const chatMessages = chat.data.messages.map((chatMessage) => {
-      const { message, senderId, createdAt } = chatMessage;
-      return {
-        message,
-        firstName: senderId.firstName,
-        senderId: senderId._id,
-        createdAt,
-      };
-    });
-    setAllIncomingMessages(chatMessages);
-  };
-
-  // Fetch the last seen from server
-  const fetchLastSeenUser = async () => {
-    const lastSeen = await axios.get(
-      `${API_BASE_URL}/user/chat/last-seen/${toUserId}`,
-      {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/user/chat/${toUserId}`, {
         withCredentials: true,
-      }
-    );
-    setLastSeen(lastSeen.data.data.lastSeen);
+      });
+
+      const messages = res.data.messages.map((chatMessage) => {
+        const { message, senderId, createdAt } = chatMessage;
+        return {
+          message,
+          firstName: senderId.firstName,
+          senderId: senderId._id,
+          createdAt,
+        };
+      });
+      setAllIncomingMessages(messages);
+      setTimeout(scrollToBottom, 100);
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+    }
   };
 
+  // Fetch last seen info
+  const fetchLastSeenUser = async () => {
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/user/chat/last-seen/${toUserId}`,
+        { withCredentials: true }
+      );
+      setLastSeen(res.data.data.lastSeen);
+    } catch (err) {
+      console.error("Error fetching last seen:", err);
+    }
+  };
+
+  // Send message
   const sendMessage = () => {
-    if (!socketRef.current) return;
-    socketRef.current.emit("sendMessage", {
+    if (!message.trim()) return;
+    socketRef.current?.emit("sendMessage", {
       firstName: user.firstName,
       fromUserId,
       toUserId,
@@ -57,6 +71,7 @@ const Chat = () => {
     setMessage("");
   };
 
+  // Format last seen
   const formatLastSeen = (time) => {
     if (!time) return "Offline";
     const date = new Date(time);
@@ -72,9 +87,10 @@ const Chat = () => {
     fetchChatMessages();
   }, [toUserId]);
 
+  // Setup socket
   useEffect(() => {
     if (!fromUserId) return;
-    // Create socket once and store in ref
+
     socketRef.current = createSocketConnection(fromUserId);
 
     socketRef.current.emit("joinChat", {
@@ -87,11 +103,9 @@ const Chat = () => {
       setAllIncomingMessages((prev) => [...prev, msg]);
     });
 
-    // Handle online users
     socketRef.current.on("onlineUsers", (onlineUsers) => {
       const isOnline = onlineUsers.includes(toUserId);
       setIsUserOnline(isOnline);
-
       if (!isOnline) fetchLastSeenUser();
     });
 
@@ -100,59 +114,59 @@ const Chat = () => {
     };
   }, [fromUserId, toUserId]);
 
+  // Auto-scroll when new message added
+  useEffect(() => {
+    scrollToBottom();
+  }, [allIncomingMessages]);
+
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] bg-base-200 p-2 rounded-lg shadow-inner max-w-3xl mx-auto">
-      {/* Header Section */}
-      {/* TODO: Last Seen properly not handle need to improved and after that UI of chat application have to improve */}
-      <div className="bg-base-100 p-4 flex items-center gap-4 shadow">
+    <div className="flex flex-col h-[calc(100vh-80px)] bg-base-200 rounded-lg shadow-inner max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="bg-base-100 p-4 flex items-center gap-4 shadow-md sticky top-0 z-10">
         <img
           src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
           alt="User avatar"
-          className="w-12 h-12 rounded-full"
+          className="w-12 h-12 rounded-full object-cover"
         />
-        <div className="">
-          {/* <h2 className="text-lg font-bold">{toUserName}</h2> */}
+        <div className="flex flex-col">
+          <h2 className="text-lg font-semibold text-gray-800">
+            {allIncomingMessages[0]?.firstName}
+          </h2>
           <p className="text-sm text-gray-500">
             {isUserOnline
               ? "Online 🟢"
-              : `Last seen at ${formatLastSeen(lastSeen)}`}
+              : `Last seen ${formatLastSeen(lastSeen)}`}
           </p>
         </div>
       </div>
 
-      {/* Chat Content */}
-      <div className="flex-1 overflow-y-auto space-y-4 px-2 py-4">
-        {/* Incoming Message */}
+      {/* Chat messages */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-base-200">
         {allIncomingMessages.map((msg, index) => {
           const isOwnMessage = msg.senderId === fromUserId;
           return (
             <div
               key={index}
-              className={`chat ${isOwnMessage ? "chat-end" : "chat-start"}`}
+              className={`chat ${isOwnMessage ? "chat-end" : "chat-start"} animate-fade-in`}
             >
               <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
                   <img
-                    alt="User avatar"
                     src={
                       isOwnMessage
                         ? "https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
                         : "https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
                     }
+                    alt="avatar"
                   />
                 </div>
               </div>
-
               <div className="chat-header">
-                {isOwnMessage ? "You" : msg.firstName}
+                {isOwnMessage ? "" : msg.firstName}
                 <time className="text-xs opacity-50 ml-2">
-                  {new Date(msg.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {formatLastSeen(msg?.createdAt)}
                 </time>
               </div>
-
               <div
                 className={`chat-bubble ${
                   isOwnMessage ? "chat-bubble-secondary" : "chat-bubble-primary"
@@ -163,18 +177,23 @@ const Chat = () => {
             </div>
           );
         })}
+        <div ref={chatEndRef} />
       </div>
 
-      {/* Input Box */}
-      <div className="p-2 bg-base-100 flex gap-2 sticky bottom-0">
+      {/* Input */}
+      <div className="p-3 bg-base-100 flex gap-2 items-center sticky bottom-0 shadow-md">
         <input
           type="text"
-          placeholder="Type your message…"
+          placeholder="Type your message..."
           className="input input-bordered flex-1"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button onClick={sendMessage} className="btn btn-primary px-6">
+        <button
+          onClick={sendMessage}
+          className="btn btn-primary px-6 whitespace-nowrap"
+        >
           Send
         </button>
       </div>
