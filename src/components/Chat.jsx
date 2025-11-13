@@ -1,16 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 import { createSocketConnection } from "../utils/socket";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constant";
+import { addUser } from "../utils/userSlice";
 
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [allIncomingMessages, setAllIncomingMessages] = useState([]);
   const [isUserOnline, setIsUserOnline] = useState(false);
   const [lastSeen, setLastSeen] = useState(null);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { toUserId } = useParams();
   const user = useSelector((state) => state.user);
   const fromUserId = user?._id;
@@ -42,7 +44,7 @@ const Chat = () => {
       setAllIncomingMessages(messages);
       setTimeout(scrollToBottom, 100);
     } catch (err) {
-      console.error("Error fetching messages:", err);
+      navigate("/login");
     }
   };
 
@@ -84,6 +86,22 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    const fetchUser = async () => {
+      if (!fromUserId) {
+        try {
+          const res = await axios.get(API_BASE_URL + "/profile/view", {
+            withCredentials: true,
+          });
+          dispatch(addUser(res.data));
+        } catch (err) {
+          navigate("/login");
+        }
+      }
+    };
+    fetchUser();
+  }, [fromUserId]);
+
+  useEffect(() => {
     fetchChatMessages();
   }, [toUserId]);
 
@@ -120,9 +138,20 @@ const Chat = () => {
   }, [allIncomingMessages]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] bg-base-200 rounded-lg shadow-inner max-w-3xl mx-auto">
+    <div className="flex flex-col bg-base-200 rounded-lg shadow-inner max-w-3xl mx-auto">
       {/* Header */}
       <div className="bg-base-100 p-4 flex items-center gap-4 shadow-md sticky top-0 z-10">
+        <button className="" onClick={() => navigate(-1)}>
+          <svg
+            class="h-6 w-6 fill-current md:h-8 md:w-8 rtl:rotate-180"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"></path>
+          </svg>
+        </button>
         <img
           src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
           alt="User avatar"
@@ -147,7 +176,9 @@ const Chat = () => {
           return (
             <div
               key={index}
-              className={`chat ${isOwnMessage ? "chat-end" : "chat-start"} animate-fade-in`}
+              className={`chat ${
+                isOwnMessage ? "chat-end" : "chat-start"
+              } animate-fade-in`}
             >
               <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
