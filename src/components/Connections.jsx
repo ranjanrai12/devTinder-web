@@ -33,8 +33,8 @@ const Connections = () => {
 
   return (
     <div className="bg-base-200">
-      <div className="max-w-4xl mx-auto bg-base-100 rounded-2xl p-6">
-        <h2 className="text-2xl font-bold mb-6 text-primary">
+      <div className="mx-auto bg-base-100 rounded-2xl p-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-primary px-3">
           Your Connections
         </h2>
 
@@ -42,11 +42,11 @@ const Connections = () => {
           {connections.map((user) => (
             <li
               key={user._id}
-              className="flex items-center justify-between py-4 hover:bg-base-200 rounded-lg px-3 transition"
+              className="flex flex-col gap-4 py-4 hover:bg-base-200 rounded-xl px-3 sm:px-4 transition"
             >
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="avatar">
-                  <div className="w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-1">
+                  <div className="w-16 sm:w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-1">
                     <img
                       src={user.photoUrl || "/assets/default-avatar.png"}
                       alt={user.firstName}
@@ -54,31 +54,33 @@ const Connections = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">
                     {user.firstName} {user.lastName}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
                     {user.about || "No bio yet."}
                   </p>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {user.skills?.map((skill, i) => (
-                      <span
-                        key={i}
-                        className="badge badge-sm badge-outline badge-primary"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+                </div>
+                <div className="flex space-x-2 ml-auto">
+                  <Link to={`/chat/${user._id}`}>
+                    <button className="btn btn-sm btn-outline btn-secondary">
+                      Message
+                    </button>
+                  </Link>
+                  {/* <button className="btn btn-sm btn-outline">View</button> */}
                 </div>
               </div>
-              <div className="flex space-x-2">
-                <Link to={`/chat/${user._id}`}>
-                  <button className="btn btn-sm btn-outline btn-primary">
-                    Message
-                  </button>
-                </Link>
-                {/* <button className="btn btn-sm btn-outline">View</button> */}
+              <div className="flex-1">
+                <div className="flex flex-wrap sm:justify-start gap-1 mt-2">
+                  {user.skills?.map((skill, i) => (
+                    <span
+                      key={i}
+                      className="badge badge-sm badge-outline badge-primary px-2 py-1 text-xs"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
             </li>
           ))}

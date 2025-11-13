@@ -40,15 +40,15 @@ const Requests = () => {
 
   if (!requests || requests.length === 0)
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
+      <div className="flex items-center justify-center text-gray-500 text-lg mt-12">
         No Requests Found
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-base-200">
-      <div className="max-w-4xl mx-auto bg-base-100 md:shadow-md rounded-2xl p-4 sm:p-6">
-        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-primary text-center sm:text-left">
+    <div className="bg-base-200">
+      <div className="mx-auto bg-base-100 md:shadow-md rounded-2xl p-4 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-primary px-3">
           Requests Received
         </h2>
 
@@ -58,7 +58,7 @@ const Requests = () => {
             return (
               <li
                 key={req._id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 hover:bg-base-200 rounded-xl px-3 sm:px-4 transition"
+                className="flex flex-col gap-4 py-4 hover:bg-base-200 rounded-xl px-3 sm:px-4 transition"
               >
                 {/* Left Section */}
                 <div className="flex items-center space-x-3 sm:space-x-4">
@@ -70,16 +70,17 @@ const Requests = () => {
                       />
                     </div>
                   </div>
-
-                  <div className="flex-1">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 text-center sm:text-left">
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800">
                       {user.firstName} {user.lastName}
                     </h3>
-                    <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-left mt-1">
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
                       {user.about || "No bio yet."}
                     </p>
-
-                    <div className="flex flex-wrap justify-center sm:justify-start gap-1 mt-2">
+                  </div>
+                </div>
+                  <div className="flex-1">
+                    <div className="flex flex-wrap sm:justify-start gap-1 mt-2">
                       {user.skills?.map((skill, i) => (
                         <span
                           key={i}
@@ -90,21 +91,20 @@ const Requests = () => {
                       ))}
                     </div>
                   </div>
-                </div>
 
                 {/* Right Section (Buttons) */}
-                <div className="flex justify-center sm:justify-end gap-2 mt-2 sm:mt-0">
+                <div className="flex justify-center sm:justify-end gap-2 mt-2 sm:mt-0 ml-auto">
+                   <button
+                    className="btn btn-sm btn-error btn-outline w-24 sm:w-auto"
+                    onClick={() => reviewRequest("rejected", req._id)}
+                  >
+                    Reject
+                  </button>
                   <button
                     className="btn btn-sm btn-success w-24 sm:w-auto"
                     onClick={() => reviewRequest("accepted", req._id)}
                   >
                     Accept
-                  </button>
-                  <button
-                    className="btn btn-sm btn-error btn-outline w-24 sm:w-auto"
-                    onClick={() => reviewRequest("rejected", req._id)}
-                  >
-                    Reject
                   </button>
                 </div>
               </li>

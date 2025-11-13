@@ -4,75 +4,88 @@ import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
 const UserCard = ({ user, shouldShowAction = true }) => {
-  const { _id, firstName, lastName, age, gender, about, photoUrl } = user;
+  const { _id, firstName, lastName, age, gender, about, photoUrl, skills } =
+    user;
   const dispatch = useDispatch();
 
   const sendAndIgnoreRequestHandler = async (status, userId) => {
     try {
       await axios.post(
-        API_BASE_URL + "/request/send/" + status + "/" + userId,
+        `${API_BASE_URL}/request/send/${status}/${userId}`,
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       dispatch(removeUserFromFeed(userId));
     } catch (err) {
-      console.log("Error:", err);
+      console.error("Error:", err);
     }
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-200">
-      <figure className="px-8 pt-8">
-        <div className="avatar">
-          <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-            <img
-              src={`${API_BASE_URL}${photoUrl}`}
-              alt={`${firstName} ${lastName}`}
-              className="object-cover"
-            />
+    <div className="max-w-sm w-full bg-white rounded-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
+      {/* Image Section */}
+      <div className="relative w-full h-56 sm:h-64">
+        <img
+          src={`${API_BASE_URL}${photoUrl}`}
+          alt={`${firstName} ${lastName}`}
+          className="object-cover w-full h-full"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-t-2xl"></div>
+
+        <div className="absolute bottom-3 left-4 text-white">
+          <h2 className="text-lg sm:text-xl font-bold drop-shadow">
+            {firstName} {lastName}
+          </h2>
+          <div className="flex items-center gap-2 mt-1 text-xs sm:text-sm">
+            {age && (
+              <span className="bg-primary/90 text-white px-2 py-1 rounded-full text-xs">
+                Age: {age}
+              </span>
+            )}
+            {gender && (
+              <span className="bg-secondary/90 text-white px-2 py-1 rounded-full capitalize text-xs">
+                {gender}
+              </span>
+            )}
           </div>
         </div>
-      </figure>
+      </div>
 
-      <div className="card-body items-center text-center space-y-2">
-        <h2 className="card-title text-xl font-bold text-gray-800">
-          {firstName} {lastName}
-        </h2>
-
-        <div className="flex justify-center space-x-3 text-sm text-gray-600">
-          {age && (
-            <span className="badge badge-outline badge-primary px-3 py-2">
-              Age: {age}
+      {/* Card Body */}
+      <div className="p-4 flex flex-col">
+        {/* Skills */}
+        <div className="p-1 flex flex-wrap gap-2">
+          {skills?.map((skill, i) => (
+            <span
+              key={i}
+              className="badge badge-sm badge-outline badge-primary px-2 py-3 text-md"
+            >
+              {skill}
             </span>
-          )}
-          {gender && (
-            <span className="badge badge-outline badge-secondary px-3 py-2 capitalize">
-              {gender}
-            </span>
-          )}
+          ))}
         </div>
-
-        {about && (
-          <p className="text-gray-500 text-sm mt-2 px-4">
-            {about.length > 80 ? about.slice(0, 80) + "..." : about}
+        {about ? (
+          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+            {about}
           </p>
+        ) : (
+          <p className="text-gray-400 italic text-sm">No bio available</p>
         )}
 
+        {/* Action Buttons */}
         {shouldShowAction && (
-          <div className="card-actions mt-4">
+          <div className="flex justify-between gap-3 mt-5 w-full">
             <button
-              className="btn btn-primary btn-sm w-28"
-              onClick={() => sendAndIgnoreRequestHandler("interested", _id)}
-            >
-              Send Request
-            </button>
-            <button
-              className="btn btn-outline btn-sm w-24"
+              className="btn btn-outline btn-sm sm:btn-md flex-1 max-w-[120px]"
               onClick={() => sendAndIgnoreRequestHandler("ignored", _id)}
             >
               Ignore
+            </button>
+            <button
+              className="btn btn-primary btn-sm sm:btn-md flex-1 max-w-[140px]"
+              onClick={() => sendAndIgnoreRequestHandler("interested", _id)}
+            >
+              Send Request
             </button>
           </div>
         )}

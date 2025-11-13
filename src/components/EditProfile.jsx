@@ -111,8 +111,8 @@ const EditProfile = ({ userData }) => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col items-center">
-      <div className="card w-full max-w-lg bg-base-100 p-8">
+    <div className="min-h-screen bg-base-200 flex flex-col">
+      <div className="bg-base-100 p-8">
         <h2 className="text-3xl font-bold text-center text-primary mb-8">
           Edit Profile
         </h2>
@@ -291,7 +291,7 @@ const EditProfile = ({ userData }) => {
       {/* Modal for Profile Preview */}
       {isPreviewOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-base-100 p-6 rounded-2xl shadow-lg w-96 relative">
+          <div className="bg-base-100 rounded-2xl shadow-lg w-96 relative">
             <button
               onClick={() => setIsPreviewOpen(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 font-bold text-xl cursor-pointer"
