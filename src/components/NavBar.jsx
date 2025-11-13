@@ -29,7 +29,7 @@ const NavBar = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className="navbar bg-base-300 shadow-sm">
+    <div className="navbar bg-base-300 shadow-sm sticky top-0 z-50 px-4">
       <div className="flex-1">
         <Link to={"/"} className="flex items-center gap-3">
           <div className="avatar">
@@ -69,7 +69,9 @@ const NavBar = () => {
       </div>
       {user && (
         <div className="dropdown dropdown-end">
-          <span>Welcome {user.firstName}</span>
+         <span className="hidden md:inline text-sm font-medium text-gray-600">
+            Welcome, <span className="text-primary font-semibold">{user.firstName}</span>
+          </span>
           <div
             tabIndex={0}
             role="button"
@@ -87,7 +89,6 @@ const NavBar = () => {
             <li>
               <Link to={"/profile"} className="justify-between">
                 Profile
-                <span className="badge">New</span>
               </Link>
             </li>
             <li>

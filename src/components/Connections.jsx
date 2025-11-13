@@ -26,13 +26,13 @@ const Connections = () => {
 
   if (!connections || connections.length === 0)
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
+      <div className="flex items-center justify-center text-gray-500 text-lg mt-12">
         No Connections Found
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="bg-base-200">
       <div className="max-w-4xl mx-auto bg-base-100 rounded-2xl p-6">
         <h2 className="text-2xl font-bold mb-6 text-primary">
           Your Connections
