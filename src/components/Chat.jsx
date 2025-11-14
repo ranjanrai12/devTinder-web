@@ -11,6 +11,8 @@ const Chat = () => {
   const [allIncomingMessages, setAllIncomingMessages] = useState([]);
   const [isUserOnline, setIsUserOnline] = useState(false);
   const [lastSeen, setLastSeen] = useState(null);
+  const [toUserDetails, setToUserDetails] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toUserId } = useParams();
@@ -32,7 +34,7 @@ const Chat = () => {
         withCredentials: true,
       });
 
-      const messages = res.data.messages.map((chatMessage) => {
+      const messages = res.data?.data.messages.map((chatMessage) => {
         const { message, senderId, createdAt } = chatMessage;
         return {
           message,
@@ -43,8 +45,10 @@ const Chat = () => {
         };
       });
       setAllIncomingMessages(messages);
+      setToUserDetails(res.data.toUserDetails);
       setTimeout(scrollToBottom, 100);
     } catch (err) {
+      console.error("Error fetching chat messages:", err);
       navigate("/login");
     }
   };
@@ -144,7 +148,7 @@ const Chat = () => {
       <div className="bg-base-100 p-4 flex items-center gap-4 shadow-md sticky top-0 z-10">
         <button className="" onClick={() => navigate(-1)}>
           <svg
-            class="h-6 w-6 fill-current md:h-8 md:w-8 rtl:rotate-180"
+            className="h-6 w-6 fill-current md:h-8 md:w-8 rtl:rotate-180"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -154,13 +158,13 @@ const Chat = () => {
           </svg>
         </button>
         <img
-          src={allIncomingMessages[0]?.photoUrl}
+          src={toUserDetails?.photoUrl}
           alt="User avatar"
           className="w-12 h-12 rounded-full object-cover"
         />
         <div className="flex flex-col">
           <h2 className="text-lg font-semibold text-gray-800">
-            {allIncomingMessages[0]?.firstName}
+            {toUserDetails?.firstName}
           </h2>
           <p className="text-sm text-gray-500">
             {isUserOnline
@@ -174,7 +178,9 @@ const Chat = () => {
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-base-200">
         {allIncomingMessages.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-gray-500">
-            <h3 className="text-lg font-semibold">You're starting a new conversation</h3>
+            <h3 className="text-lg font-semibold">
+              You're starting a new conversation
+            </h3>
             <p className="text-sm mt-2">Type your first message below.</p>
           </div>
         ) : (
@@ -190,11 +196,7 @@ const Chat = () => {
                 <div className="chat-image avatar">
                   <div className="w-10 rounded-full">
                     <img
-                      src={
-                        isOwnMessage
-                          ? user.photoUrl
-                          : msg.photoUrl
-                      }
+                      src={isOwnMessage ? user.photoUrl : msg.photoUrl}
                       alt="avatar"
                     />
                   </div>

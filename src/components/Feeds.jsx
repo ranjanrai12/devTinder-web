@@ -28,13 +28,13 @@ const Feeds = () => {
 
   if (!userFeeds || userFeeds.length === 0)
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
+      <div className="mt-20 flex items-center justify-center text-gray-500 text-lg">
         No Feeds Found
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-base-200 md:p-6">
+    <div className="mt-20 bg-base-200 md:p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
         {userFeeds.map((user) => (
           <UserCard key={user._id} user={user} />
