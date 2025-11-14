@@ -196,7 +196,7 @@ const EditProfile = ({ userData }) => {
                 required
               />
             </div>
-
+            {/* Gender */}
             <div>
               <label className="label">
                 <span className="label-text font-medium">Gender</span>
@@ -221,7 +221,7 @@ const EditProfile = ({ userData }) => {
             </label>
             <textarea
               name="about"
-              value={user.about || ""}
+              value={user.about}
               onChange={handleChange}
               className="textarea textarea-bordered w-full h-24"
               placeholder="Tell something about yourself..."
