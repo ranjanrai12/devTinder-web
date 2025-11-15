@@ -2,9 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { createSocketConnection } from "../utils/socket";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { API_BASE_URL } from "../utils/constant";
 import { addUser } from "../utils/userSlice";
+import axiosInstance from "../utils/axiosInstance";
 
 const Chat = () => {
   const [message, setMessage] = useState("");
@@ -30,9 +29,7 @@ const Chat = () => {
   // Fetch messages
   const fetchChatMessages = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/user/chat/${toUserId}`, {
-        withCredentials: true,
-      });
+      const res = await axiosInstance.get(`/user/chat/${toUserId}`);
 
       const messages = res.data?.data.messages.map((chatMessage) => {
         const { message, senderId, createdAt } = chatMessage;
@@ -56,10 +53,7 @@ const Chat = () => {
   // Fetch last seen info
   const fetchLastSeenUser = async () => {
     try {
-      const res = await axios.get(
-        `${API_BASE_URL}/user/chat/last-seen/${toUserId}`,
-        { withCredentials: true }
-      );
+      const res = await axiosInstance.get(`/user/chat/last-seen/${toUserId}`);
       setLastSeen(res.data.data.lastSeen);
     } catch (err) {
       console.error("Error fetching last seen:", err);
@@ -94,9 +88,7 @@ const Chat = () => {
     const fetchUser = async () => {
       if (!fromUserId) {
         try {
-          const res = await axios.get(API_BASE_URL + "/profile/view", {
-            withCredentials: true,
-          });
+          const res = await axiosInstance.get( "/profile/view");
           dispatch(addUser(res.data));
         } catch (err) {
           navigate("/login");

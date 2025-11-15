@@ -1,7 +1,6 @@
-import axios from "axios";
-import { API_BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
+import axiosInstance from "../utils/axiosInstance";
 
 const UserCard = ({ user, shouldShowAction = true }) => {
   const { _id, firstName, lastName, age, gender, about, photoUrl, skills } =
@@ -10,19 +9,15 @@ const UserCard = ({ user, shouldShowAction = true }) => {
 
   const sendAndIgnoreRequestHandler = async (status, userId) => {
     try {
-      await axios.post(
-        `${API_BASE_URL}/request/send/${status}/${userId}`,
-        {},
-        { withCredentials: true }
-      );
+      await axiosInstance.post(`/request/send/${status}/${userId}`, {});
       dispatch(removeUserFromFeed(userId));
     } catch (err) {
       console.error("Error:", err);
     }
   };
-
+''
   return (
-    <div className="max-w-sm w-full bg-white rounded-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
+    <div className="w-full bg-white rounded-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
       {/* Image Section */}
       <div className="relative w-full h-56 sm:h-64">
         <img

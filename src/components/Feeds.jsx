@@ -1,10 +1,9 @@
-import axios from "axios";
-import { API_BASE_URL } from "../utils/constant";
 import { useSelector, useDispatch } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import { useEffect } from "react";
 import UserCard from "./UserCard";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 const Feeds = () => {
   const userFeeds = useSelector((state) => state.feed);
@@ -14,9 +13,7 @@ const Feeds = () => {
   const getFeeds = async () => {
     if (userFeeds) return;
     try {
-      const userFeedResponse = await axios.get(API_BASE_URL + "/user/feed", {
-        withCredentials: true,
-      });
+      const userFeedResponse = await axiosInstance.get("/user/feed");
       dispatch(addFeed(userFeedResponse?.data?.data));
     } catch (err) {
       if (err.status === 401) navigate("/login");
@@ -34,7 +31,7 @@ const Feeds = () => {
     );
 
   return (
-    <div className="mt-20 bg-base-200 md:p-6">
+    <div className="bg-base-200 md:p-2">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
         {userFeeds.map((user) => (
           <UserCard key={user._id} user={user} />

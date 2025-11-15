@@ -1,10 +1,9 @@
-import axios from "axios";
 import { useState } from "react";
-import { API_BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import UserCard from "./UserCard";
+import axiosInstance from "../utils/axiosInstance";
 
 const EditProfile = ({ userData }) => {
   const dispatch = useDispatch();
@@ -65,16 +64,7 @@ const EditProfile = ({ userData }) => {
       if (user.photoFile) {
         formData.append("photoUrl", user.photoFile);
       }
-      const response = await axios.patch(
-        API_BASE_URL + "/profile/edit",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axiosInstance.patch("/profile/edit", formData);
       dispatch(addUser({ ...response.data.data, email: user.email }));
       navigate("/");
     } catch (err) {

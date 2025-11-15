@@ -2,9 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
-import axios from "axios";
-import { API_BASE_URL } from "../utils/constant";
 import { removeAllFeed } from "../utils/feedSlice";
+import axiosInstance from "../utils/axiosInstance";
 
 const NavBar = () => {
   const user = useSelector((state) => state.user);
@@ -13,11 +12,7 @@ const NavBar = () => {
 
   const logoutHandler = async () => {
     try {
-      await axios.post(
-        API_BASE_URL + "/auth/logout",
-        {},
-        { withCredentials: true }
-      );
+      await axiosInstance.post("/auth/logout", {});
       dispatch(removeUser());
       dispatch(removeAllFeed());
       navigate("/login");
@@ -69,8 +64,9 @@ const NavBar = () => {
       </div>
       {user && (
         <div className="dropdown dropdown-end">
-         <span className="hidden md:inline text-sm font-medium text-gray-600">
-            Welcome, <span className="text-primary font-semibold">{user.firstName}</span>
+          <span className="hidden md:inline text-sm font-medium text-gray-600">
+            Welcome,{" "}
+            <span className="text-primary font-semibold">{user.firstName}</span>
           </span>
           <div
             tabIndex={0}

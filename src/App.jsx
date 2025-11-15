@@ -13,31 +13,33 @@ import RefundPolicy from "./components/RefundPolicy";
 import ContactUs from "./components/ContactUs";
 import ShippingPolicy from "./components/AboutUs";
 import Chat from "./components/Chat";
+import GlobalLoader from "./components/GlobalLoader";
 
 function App() {
   return (
     <>
       <Provider store={appStore}>
         <BrowserRouter basename="/">
-          <Routes>
-            <Route path="/" element={<Body />}>
-              <Route path="/" element={<Feeds />}></Route>
-              <Route path="/login" element={<Login />}></Route>
-              <Route path="/profile" element={<Profile />}></Route>
-              <Route path="/connections" element={<Connections />}></Route>
-              <Route path="/requests" element={<Requests />}></Route>
-            </Route>
+          <GlobalLoader />
+            <Routes>
+              <Route path="/" element={<Body />}>
+                <Route path="/" element={<Feeds />}></Route>
+                <Route path="/login" element={<Login />}></Route>
+                <Route path="/profile" element={<Profile />}></Route>
+                <Route path="/connections" element={<Connections />}></Route>
+                <Route path="/requests" element={<Requests />}></Route>
+              </Route>
               <Route path="/chat/:toUserId" element={<Chat />}></Route>
-            <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
-            <Route
-              path="/terms-of-service"
-              element={<TermsOfService />}
-            ></Route>
-            <Route path="/refund-policy" element={<RefundPolicy />}></Route>
-            <Route path="/contact-us" element={<ContactUs />}></Route>
-            <Route path="/about-us" element={<ShippingPolicy />}></Route>
-            <Route path="*" element={<h1>Not found</h1>}></Route>
-          </Routes>
+              <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
+              <Route
+                path="/terms-of-service"
+                element={<TermsOfService />}
+              ></Route>
+              <Route path="/refund-policy" element={<RefundPolicy />}></Route>
+              <Route path="/contact-us" element={<ContactUs />}></Route>
+              <Route path="/about-us" element={<ShippingPolicy />}></Route>
+              <Route path="*" element={<h1>Not found</h1>}></Route>
+            </Routes>
         </BrowserRouter>
       </Provider>
     </>
